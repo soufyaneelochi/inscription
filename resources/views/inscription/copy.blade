@@ -1,0 +1,475 @@
+@extends('layouts.app')
+
+@section('content')
+@php
+use App\Models\Maroc;
+$cities= Maroc::all();
+$kk=Auth::guard()->user();
+// dd($kk);
+@endphp
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Dashboard ') }}<?php echo($kk->id) ?></div>
+
+                <div class="card-body bg-light">
+                    
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    @if (session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                <h3>hallo create user me</h3>
+                    <form enctype='multipart/form-data' action={{ url('inscription') }} method="POST">
+                        @csrf
+                        
+
+                        <input type="text" name="user_id" value="<?php echo($kk->id) ?>" hidden>
+                        <div class="row mb-3">
+                            <label for="typebaccalaureat " class="col-md-4 col-form-label text-md-end">{{ __('Type baccalaureat') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="typebaccalaureat" type="text" class="form-control @error('typebaccalaureat') is-invalid @enderror" name="typebaccalaureat" value="{{ old('typebaccalaureat') }}" required autocomplete="typebaccalaureat" autofocus>
+
+                                @error('typebaccalaureat')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="mentionbac" class="col-md-4 col-form-label text-md-end">{{ __('Mention BAC') }}</label>
+
+                            <div class="col-md-6">
+                                <select class="form-select" name="mentionbac">
+                                    <option value="">Select one</option>
+                                    <option value="Très bien">Très bien</option>
+                                    <option value="Bien">Bien</option>
+                                    <option value="Assez bien">Assez bien</option>
+                                    <option value="Passable">Passable</option>
+                                </select>
+
+                                @error('mentionbac')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="typediplome" class="col-md-4 col-form-label text-md-end">{{ __('Type de diplôme') }}</label>
+
+                            <div class="col-md-8" style="font-size: 13px" >
+                                <input style="border: 1px solid grey" id="typediplome" type="radio" class="form-check-input @error('typediplome') is-invalid @enderror" name="typediplome" value="DEUG" {{ old('typediplome') == "DEUG" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    DEUG en Sciences économiques et gestion
+                                </label><br>
+                                <input style="border: 1px solid grey" id="typediplome" type="radio" class="form-check-input @error('typediplome') is-invalid @enderror" name="typediplome" value="BTS" {{ old('typediplome') == "BTS" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    BTS en comptabilité et gestion
+                                </label><br>
+                                <input style="border: 1px solid grey" id="typediplome" type="radio" class="form-check-input btn-danger @error('typediplome') is-invalid @enderror" name="typediplome" value="DUT" {{ old('typediplome') == "DUT" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    DUT en Techniques de management
+                                </label><br>
+                                <input style="border: 1px solid grey" id="typediplome" type="radio" class="form-check-input @error('typediplome') is-invalid @enderror" name="typediplome" value="DTS" {{ old('typediplome') == "DTS" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    DTS en Finance et comptabilité
+                                </label><br>
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <label for="optiondiplome" class="col-md-4 col-form-label text-md-end">{{ __('Option du diplôme') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="optiondiplome" type="text" class="form-control @error('optiondiplome') is-invalid @enderror" name="optiondiplome" value="{{ old('optiondiplome') }}" required autocomplete="optiondiplome">
+
+                                @error('optiondiplome')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="etablissement" class="col-md-4 col-form-label text-md-end">{{ __('Etablissement') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="etablissement" type="text" class="form-control @error('etablissement') is-invalid @enderror" name="etablissement" value="{{ old('etablissement') }}" required autocomplete="etablissement">
+
+                                @error('etablissement')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="villeetablissement" class="col-md-4 col-form-label text-md-end">{{ __('Ville d\'Etablissement') }}</label>
+
+                            <div class="col-md-6">
+                                <input list="villeetablissement1" id="villeetablissement" name="villeetablissement" class="form-control @error('villeetablissement') is-invalid @enderror" name="villeetablissement" value="{{ old('villeetablissement') }}" required autocomplete="villeetablissement">
+                                <datalist id="villeetablissement1">
+                                    @foreach($cities as $city)
+                                        <option value="{{ $city->city }}" >
+                                    @endforeach
+                                </datalist>
+
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="moyenne" class="col-md-4 col-form-label text-md-end">{{ __('Moyenne du diplome') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="moyenne" type="text" class="form-control @error('moyenne') is-invalid @enderror" name="moyenne" value="{{ old('moyenne') }}" required autocomplete="moyenne">
+
+                                @error('moyenne')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        {{-- <div class="row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div> --}}
+                        
+                            
+
+
+                        <div class="row mb-0">
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Register') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+                    <fieldset id="section-1">
+                    <input type="text">
+                    <button type="button" class="next-section" data-section="section-2">
+                        {{ __('Suivant') }}
+                    </button>
+                    </fieldset>
+                    <fieldset id="section-2" style="display:none">
+                    <input type="text">
+                    <button type="button" class="previous-section" data-section="section-1">
+                        {{ __('Retour') }}
+                    </button>
+                    button type="button" class="next-section" data-section="section-3">
+                        {{ __('Suivant') }}
+                    </button>
+                    </fieldset>
+                    <fieldset id="section-3" style="display:none">
+                    <input type="text">
+                    <button type="button" class="previous-section" data-section="section-2">
+                        {{ __('Retour') }}
+                    </button>
+                    button type="button" class="next-section" data-section="section-4">
+                        {{ __('Suivant') }}
+                    </button>
+                    </fieldset>
+                    <fieldset id="section-4" style="display:none">
+                    <input type="text">
+                    <button type="button" class="previous-section" data-section="section-3">
+                        {{ __('Retour') }}
+                    </button>
+                    button type="button" class="next-section" data-section="section-5">
+                        {{ __('Suivant') }}
+                    </button>
+                    </fieldset>
+                    <fieldset id="section-5" style="display:none">
+                    <input type="text">
+                    <button type="button" class="previous-section" data-section="section-4">
+                        {{ __('Retour') }}
+                    </button>
+                        <button type="submit">
+                            {{ __('Register') }}
+                        </button>
+                    </fieldset>
+                </form>
+
+                <!-- your script to handle the button clicks -->
+                <script>
+                    $('.next-section, .previous-section').on('click', function() {
+                        var currentSection = $(this).parent();
+                        var nextSection = $('#' + $(this).data('section'));
+                        if (nextSection.length) {
+                            currentSection.hide();
+                            nextSection.show();
+                        } else {
+                            console.error('Section not found: ' + $(this).data('section'));
+                        }
+                    });
+                </script>
+
+                 <form enctype='multipart/form-data' action={{ url('inscription') }} method="POST">
+                    @csrf
+                    <fieldset id="section-1">
+                        <input type="text" name="user_id" value="<?php echo($kk->id) ?>" hidden>
+                        <div class="row mb-3">
+                            <label for="typebaccalaureat " class="col-md-4 col-form-label text-md-end">{{ __('Type baccalaureat') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="typebaccalaureat" type="text" class="form-control @error('typebaccalaureat') is-invalid @enderror" name="typebaccalaureat" value="{{ old('typebaccalaureat') }}" required autocomplete="typebaccalaureat" autofocus>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="mentionbac" class="col-md-4 col-form-label text-md-end">{{ __('Mention BAC') }}</label>
+                            <div class="col-md-6">
+                                <select class="form-select" name="mentionbac">
+                                    <option value="">Select one</option>
+                                    <option value="Très bien">Très bien</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="typediplome" class="col-md-4 col-form-label text-md-end">{{ __('Type de diplôme') }}</label>
+
+                            <div class="col-md-8" style="font-size: 13px" >
+                                <input style="border: 1px solid grey" id="typediplome" type="radio" class="form-check-input @error('typediplome') is-invalid @enderror" name="typediplome" value="DEUG" {{ old('typediplome') == "DEUG" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    DEUG en Sciences économiques et gestion
+                                </label><br>
+                                <input style="border: 1px solid grey" id="typediplome" type="radio" class="form-check-input @error('typediplome') is-invalid @enderror" name="typediplome" value="BTS" {{ old('typediplome') == "BTS" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    BTS en comptabilité et gestion
+                                </label><br>
+                                <input style="border: 1px solid grey" id="typediplome" type="radio" class="form-check-input btn-danger @error('typediplome') is-invalid @enderror" name="typediplome" value="DUT" {{ old('typediplome') == "DUT" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    DUT en Techniques de management
+                                </label><br>
+                                <input style="border: 1px solid grey" id="typediplome" type="radio" class="form-check-input @error('typediplome') is-invalid @enderror" name="typediplome" value="DTS" {{ old('typediplome') == "DTS" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    DTS en Finance et comptabilité
+                                </label><br>
+                            </div>
+                        </div>
+                        <button type="button" class="next-section btn btn-outline-primary offset-md-4" data-section="section-2">
+                            {{ __('Suivant') }}
+                        </button>
+                    </fieldset>
+                    <fieldset id="section-2" style="display:none">
+                        <div class="row mb-3">
+                            <label for="typediplome" class="col-md-4 col-form-label text-md-end">{{ __('la methode de moyenne') }}</label>
+                            <div class="col-md-8"  >
+                                <input style="border: 1px solid grey" id="option1" type="radio" class="form-check-input @error('options') is-invalid @enderror" name="options" value="options1" {{ old('options') == "options1" ? 'checked' : '' }} required autocomplete="options" >
+                                <label class="form-check-label" for="options">
+                                    Moyenne par semestre
+                                </label><br>
+                                <input style="border: 1px solid grey" id="option2" type="radio" class="form-check-input @error('options') is-invalid @enderror" name="options" value="options2" {{ old('options') == "options2" ? 'checked' : '' }} required autocomplete="options" >
+                                <label class="form-check-label" for="options">
+                                    Moyenne par année
+                                </label>
+                            </div>
+                        </div>
+                        <div id="inputs1">
+                            <div class="row mb-3">
+                                <label for="moyenne1" class="col-md-4 col-form-label text-md-end">{{ __('S1') }}</label>
+                                <input type="text" name="semestre1" value="S1" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne1" placeholder="xx,yy" type="text" class="form-control @error('moyenne1') is-invalid @enderror" name="moyenne1" value="{{ old('moyenne1') }}"  autocomplete="moyenne1" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="moyenne2" class="col-md-4 col-form-label text-md-end">{{ __('S2') }}</label>
+                                <input type="text" name="semestre2" value="S2" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne2" placeholder="xx,yy" type="text" class="form-control @error('moyenne2') is-invalid @enderror" name="moyenne2" value="{{ old('moyenne2') }}"  autocomplete="moyenne2" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="moyenne3" class="col-md-4 col-form-label text-md-end">{{ __('S3') }}</label>
+                                <input type="text" name="semestre3" value="S3" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne3" placeholder="xx,yy" type="text" class="form-control @error('moyenne3') is-invalid @enderror" name="moyenne3" value="{{ old('moyenne3') }}"  autocomplete="moyenne3" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="moyenne4" class="col-md-4 col-form-label text-md-end">{{ __('S4') }}</label>
+                                <input type="text" name="semestre4" value="S4" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne4" placeholder="xx,yy" type="text" class="form-control @error('moyenne4') is-invalid @enderror" name="moyenne4" value="{{ old('moyenne4') }}"  autocomplete="moyenne4" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="inputs2" style="display: none;">
+                            
+                            <div class="row mb-3">
+                                <label for="moyenne5" class="col-md-4 col-form-label text-md-end">{{ __('1er année') }}</label>
+                                <input type="text" name="semestre5" value="1erannee" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne5" placeholder="xx,yy" type="text" class="form-control @error('moyenne5') is-invalid @enderror" name="moyenne5" value="{{ old('moyenne5') }}"  autocomplete="moyenne5" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <label for="moyenne6" class="col-md-4 col-form-label text-md-end">{{ __('2eme année') }}</label>
+                                <input type="text" name="semestre6" value="2emeannee" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne6" placeholder="xx,yy" type="text" class="form-control @error('moyenne6') is-invalid @enderror" name="moyenne6" value="{{ old('moyenne6') }}"  autocomplete="moyenne6" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- JavaScript/jQuery code to show/hide the text inputs -->
+                        <script>
+                            $(document).ready(function() {
+                            $('#inputs1 input[type=text], #inputs2 input[type=text]').attr('disabled', true);
+                        
+                            $('#option1, #option2').change(function() {
+                            if ($('#option1').is(':checked')) {
+                                $('#inputs1').show();
+                                $('#inputs2').hide();
+                                $('#inputs1 input[type=text]').attr('disabled', false);
+                                // Clear the values of text inputs in #inputs2
+                                $('#inputs2 input[type=text]').val('');
+                            }
+                            else if ($('#option2').is(':checked')) {
+                                $('#inputs1').hide();
+                                $('#inputs2').show();
+                                $('#inputs2 input[type=text]').attr('disabled', false);
+                                // Clear the values of text inputs in #inputs1
+                                $('#inputs1 input[type=text]').val('');
+                            }
+                            });
+                        });
+                        </script>
+                        <button type="button" class="previous-section btn btn-outline-secondary offset-md-4" data-section="section-1">
+                            {{ __('Retour') }}
+                        </button>
+                        <button type="button" class="next-section btn btn-outline-primary" data-section="section-3">
+                            {{ __('Suivant') }}
+                        </button>
+                    </fieldset>
+                    <fieldset id="section-3" style="display:none">
+                            <div class="row mb-3">
+                                <label for="note1" class="col-md-4 col-form-label text-md-end">{{ __('Les concepts de base') }}</label>
+                                <input type="text" name="matiere1" value="les concepts de base" hidden>
+                                <div class="col-md-6">
+                                    <input id="note1" placeholder="xx,yy" type="text" class="form-control @error('note1') is-invalid @enderror" name="note1" value="{{ old('note1') }}"  autocomplete="note1" >
+                                </div>
+                            </div>
+                        <button type="button" class="previous-section btn btn-outline-secondary offset-md-4" data-section="section-2">
+                            {{ __('Retour') }}
+                        </button>
+                        <button type="button" class="next-section btn btn-outline-primary" data-section="section-4">
+                            {{ __('Suivant') }}
+                        </button>
+                    </fieldset>
+                    <fieldset id="section-4" style="display:none">
+                        <div class="row mb-3">
+                            <label for="file1" class="col-md-5 col-form-label text-md-end">{{ __('Importer votre photo') }}</label>
+                            <div class="col-md-6">
+                                <input id="file1" type="file" class="form-control @error('file1') is-invalid @enderror" name="file1" value="{{ old('file1') }}" required autocomplete="file1" >
+                            </div>
+                        </div>
+                        <button type="button" class="previous-section btn btn-outline-secondary offset-md-5" data-section="section-3">
+                            {{ __('Retour') }}
+                        </button>
+                        {{-- <button type="button" class="next-section btn btn-outline-primary" data-section="section-5">
+                            {{ __('Suivant') }}
+                        </button> --}}
+                        <button type="submit" class="btn btn-primary">
+                            {{ __('Register') }}
+                        </button>
+                    </fieldset>
+                    {{-- <fieldset id="section-5" style="display:none">
+                        <button type="button" class="previous-section btn btn-outline-secondary " data-section="section-4">
+                            {{ __('Retour') }}
+                        </button>
+                        <button type="submit" class="btn btn-outline-success">
+                            {{ __('Register') }}
+                        </button>
+                    </fieldset> --}}
+                </form>
+
+
+                
+
+    /* .card {
+        border: 1px solid #ccc;
+        padding: 20px;
+        width: 300px;
+        margin: auto;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: center;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        background-color: #fff;
+    }
+
+    .profile-image {
+        border-radius: 50%;
+        margin-bottom: 10px;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    h1 {
+        margin-top: 0;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .info {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    .info p {
+        margin: 0;
+        margin-bottom: 5px;
+    }
+
+    .notes {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    .notes li {
+        margin-bottom: 10px;
+    } */

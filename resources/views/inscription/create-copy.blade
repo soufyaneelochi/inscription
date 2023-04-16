@@ -1,0 +1,636 @@
+@extends('layouts.app')
+@section('content')
+@php
+use App\Models\Maroc;
+$cities= Maroc::all();
+$kk=Auth::guard()->user();
+// dd($kk);
+@endphp
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header"><?php echo($kk->email.' '.$kk->nom.' '.$kk->prenom) ?></div>
+
+                <div class="card-body bg-light">
+                    
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    @if (session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                <!-- include jQuery library -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                <!-- your form markup -->
+                    <form enctype='multipart/form-data' action={{ url('inscription') }} method="POST">
+                    @csrf
+                    <fieldset id="section-1">
+                        <input type="text" name="user_id" value="<?php echo($kk->id) ?>" hidden>
+                        <div class="row mb-3">
+                            <label for="typebaccalaureat " class="col-md-4 col-form-label text-md-end">{{ __('Type baccalaureat') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="typebaccalaureat" type="text" class="form-control @error('typebaccalaureat') is-invalid @enderror" name="typebaccalaureat" value="{{ old('typebaccalaureat') }}" required autocomplete="typebaccalaureat" autofocus>
+
+                                @error('typebaccalaureat')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="mentionbac" class="col-md-4 col-form-label text-md-end">{{ __('Mention BAC') }}</label>
+
+                            <div class="col-md-6">
+                                <select class="form-select" name="mentionbac">
+                                    <option value="">Select one</option>
+                                    <option value="Très bien">Très bien</option>
+                                    <option value="Bien">Bien</option>
+                                    <option value="Assez bien">Assez bien</option>
+                                    <option value="Passable">Passable</option>
+                                </select>
+
+                                @error('mentionbac')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="typediplome" class="col-md-4 col-form-label text-md-end">{{ __('Type de diplôme') }}</label>
+
+                            <div class="col-md-8" style="font-size: 13px" >
+                                <input style="border: 1px solid grey" id="DEUG" type="radio" class="form-check-input @error('typediplome') is-invalid @enderror" name="typediplome" value="DEUG" {{ old('typediplome') == "DEUG" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    DEUG en Sciences économiques et gestion
+                                </label><br>
+                                <input style="border: 1px solid grey" id="BTS" type="radio" class="form-check-input @error('typediplome') is-invalid @enderror" name="typediplome" value="BTS" {{ old('typediplome') == "BTS" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    BTS en comptabilité et gestion
+                                </label><br>
+                                <input style="border: 1px solid grey" id="DUT" type="radio" class="form-check-input btn-danger @error('typediplome') is-invalid @enderror" name="typediplome" value="DUT" {{ old('typediplome') == "DUT" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    DUT en Techniques de management
+                                </label><br>
+                                <input style="border: 1px solid grey" id="DTS" type="radio" class="form-check-input @error('typediplome') is-invalid @enderror" name="typediplome" value="DTS" {{ old('typediplome') == "DTS" ? 'checked' : '' }} required autocomplete="typediplome" >
+                                <label class="form-check-label" for="typediplome">
+                                    DTS en Finance et comptabilité
+                                </label><br>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <label for="optiondiplome" class="col-md-4 col-form-label text-md-end">{{ __('Option du diplôme') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="optiondiplome" type="text" class="form-control @error('optiondiplome') is-invalid @enderror" name="optiondiplome" value="{{ old('optiondiplome') }}" required autocomplete="optiondiplome">
+
+                                @error('optiondiplome')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="etablissement" class="col-md-4 col-form-label text-md-end">{{ __('Etablissement') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="etablissement" type="text" class="form-control @error('etablissement') is-invalid @enderror" name="etablissement" value="{{ old('etablissement') }}" required autocomplete="etablissement">
+
+                                @error('etablissement')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="villeetablissement" class="col-md-4 col-form-label text-md-end">{{ __('Ville d\'Etablissement') }}</label>
+
+                            <div class="col-md-6">
+                                <input list="villeetablissement1" id="villeetablissement" name="villeetablissement" class="form-control @error('villeetablissement') is-invalid @enderror" name="villeetablissement" value="{{ old('villeetablissement') }}" required autocomplete="villeetablissement">
+                                <datalist id="villeetablissement1">
+                                    @foreach($cities as $city)
+                                        <option value="{{ $city->city }}" >
+                                    @endforeach
+                                </datalist>
+
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="moyenne" class="col-md-4 col-form-label text-md-end">{{ __('Moyenne du diplome') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="moyenne" placeholder="xx,yy" type="text" class="form-control @error('moyenne') is-invalid @enderror" name="moyenne" value="{{ old('moyenne') }}" required autocomplete="moyenne">
+
+                                @error('moyenne')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <button type="button" class="next-section btn btn-outline-primary offset-md-4" data-section="section-2">
+                            {{ __('Suivant') }}
+                        </button>
+                    </fieldset>
+                    <fieldset id="section-2" style="display:none">
+                        {{-- <div class="row mb-3">
+                            <label for="typediplome" class="col-md-4 col-form-label text-md-end">{{ __('la methode de moyenne') }}</label>
+                            <div class="col-md-8"  >
+                                <input style="border: 1px solid grey" id="option1" type="radio" class="form-check-input @error('options') is-invalid @enderror" name="options" value="options1" {{ old('options') == "options1" ? 'checked' : '' }} required autocomplete="options" >
+                                <label class="form-check-label" for="options">
+                                    Moyenne par semestre
+                                </label><br>
+                                <input style="border: 1px solid grey" id="option2" type="radio" class="form-check-input @error('options') is-invalid @enderror" name="options" value="options2" {{ old('options') == "options2" ? 'checked' : '' }} required autocomplete="options" >
+                                <label class="form-check-label" for="options">
+                                    Moyenne par année
+                                </label>
+                            </div> 
+                        </div>--}}
+                        <div id="inputs1">
+                            <div class="row mb-3">
+                                <label for="moyenne1" class="col-md-4 col-form-label text-md-end">{{ __('S1') }}</label>
+                                <input type="text" name="semestre1" value="S1" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne1" placeholder="xx,yy" type="text" class="form-control @error('moyenne1') is-invalid @enderror" name="moyenne1" value="{{ old('moyenne1') }}"  autocomplete="moyenne1" disabled>
+    
+                                    @error('moyenne1')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="moyenne2" class="col-md-4 col-form-label text-md-end">{{ __('S2') }}</label>
+                                <input type="text" name="semestre2" value="S2" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne2" placeholder="xx,yy" type="text" class="form-control @error('moyenne2') is-invalid @enderror" name="moyenne2" value="{{ old('moyenne2') }}"  autocomplete="moyenne2" disabled>
+    
+                                    @error('moyenne2')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="moyenne3" class="col-md-4 col-form-label text-md-end">{{ __('S3') }}</label>
+                                <input type="text" name="semestre3" value="S3" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne3" placeholder="xx,yy" type="text" class="form-control @error('moyenne3') is-invalid @enderror" name="moyenne3" value="{{ old('moyenne3') }}"  autocomplete="moyenne3" disabled>
+    
+                                    @error('moyenne3')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="moyenne4" class="col-md-4 col-form-label text-md-end">{{ __('S4') }}</label>
+                                <input type="text" name="semestre4" value="S4" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne4" placeholder="xx,yy" type="text" class="form-control @error('moyenne4') is-invalid @enderror" name="moyenne4" value="{{ old('moyenne4') }}"  autocomplete="moyenne4" disabled>
+    
+                                    @error('moyenne4')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div id="inputs2" style="display: none;">
+                            
+                            <div class="row mb-3">
+                                <label for="moyenne5" class="col-md-4 col-form-label text-md-end">{{ __('1er année') }}</label>
+                                <input type="text" name="semestre5" value="1erannee" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne5" placeholder="xx,yy" type="text" class="form-control @error('moyenne5') is-invalid @enderror" name="moyenne5" value="{{ old('moyenne5') }}"  autocomplete="moyenne5" disabled>
+    
+                                    @error('moyenne5')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <label for="moyenne6" class="col-md-4 col-form-label text-md-end">{{ __('2eme année') }}</label>
+                                <input type="text" name="semestre6" value="2emeannee" hidden>
+                                <div class="col-md-6">
+                                    <input id="moyenne6" placeholder="xx,yy" type="text" class="form-control @error('moyenne6') is-invalid @enderror" name="moyenne6" value="{{ old('moyenne6') }}"  autocomplete="moyenne6" disabled>
+    
+                                    @error('moyenne6')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                            #inputs1 input[type=text], #inputs2 input[type=text] {
+                            display: block;
+                            margin-top: 5px;
+                            margin-bottom: 5px;
+                            width: 200px;
+                            padding: 5px;
+                            border: 1px solid #ccc;
+                            border-radius: 4px;
+                            }
+                        </style>
+                        
+                        <!-- JavaScript/jQuery code to show/hide the text inputs -->
+                        <script>
+                            $(document).ready(function() {
+                            $('#inputs1 input[type=text], #inputs2 input[type=text]').attr('disabled', true);
+                        
+                            $('#DEUG, #BTS, #DUT, #DTS').change(function() {
+                            if ($('#DEUG, #BTS, #DUT').is(':checked')) {
+                                $('#inputs1').show();
+                                $('#inputs2').hide();
+                                $('#inputs1 input[type=text]').attr('disabled', false);
+                                // Clear the values of text inputs in #inputs2
+                                $('#inputs2 input[type=text]').val('');
+                                $('#inputs2 input[type=text]').attr('disabled', false);
+                            }
+                            else if ($('#DTS').is(':checked')) {
+                                $('#inputs1').hide();
+                                $('#inputs2').show();
+                                $('#inputs2 input[type=text]').attr('disabled', false);
+                                // Clear the values of text inputs in #inputs1
+                                $('#inputs1 input[type=text]').val('');
+                                $('#inputs1 input[type=text]').attr('disabled', false);
+                            }
+                            });
+                        });
+                        </script>
+                        <button type="button" class="previous-section btn btn-outline-secondary offset-md-4" data-section="section-1">
+                            {{ __('Retour') }}
+                        </button>
+                        <button type="button" class="next-section btn btn-outline-primary" data-section="section-3">
+                            {{ __('Suivant') }}
+                        </button>
+                    </fieldset>
+                    <fieldset id="section-3" style="display:none">
+                        <input type="text" placeholder="DEUG">
+                        <button type="button" class="previous-section btn btn-outline-secondary offset-md-5" data-section="section-2">
+                            {{ __('Retour') }}
+                        </button>
+                        <button type="button" class="next-section btn btn-outline-primary" data-section="section-4">
+                            {{ __('Suivant') }}
+                        </button>
+                    </fieldset>
+                    <fieldset id="section-4" style="display:none">
+                        <div>
+                            <h3 class="d-flex justify-content-center">Comptabilité financière</h3>
+                            <div class="row mb-3">
+                                <label for="note1" class="col-md-4 col-form-label text-md-end">{{ __('Les concepts de base') }}</label>
+                                <input type="text" name="matiere1" value="les concepts de base" hidden>
+                                <div class="col-md-6">
+                                    <input id="note1" placeholder="xx,yy" type="text" class="form-control @error('note1') is-invalid @enderror" name="note1" value="{{ old('note1') }}"  autocomplete="note1" >
+
+                                    @error('note1')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="note2" class="col-md-4 col-form-label text-md-end">{{ __('Les opérations courantes') }}</label>
+                                <input type="text" name="matiere2" value="les opérations courantes" hidden>
+                                <div class="col-md-6">
+                                    <input id="note2" placeholder="xx,yy" type="text" class="form-control @error('note2') is-invalid @enderror" name="note2" value="{{ old('note2') }}"  autocomplete="note2" >
+
+                                    @error('note2')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="note3" class="col-md-4 col-form-label text-md-end">{{ __('Comptabilité approfondies et révision des comptes') }}</label>
+                                <input type="text" name="matiere3" value="Comptabilité approfondies et révision des comptes" hidden>
+                                <div class="col-md-6">
+                                    <input id="note3" placeholder="xx,yy" type="text" class="form-control @error('note3') is-invalid @enderror" name="note3" value="{{ old('note3') }}"  autocomplete="note3" >
+
+                                    @error('note3')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="note4" class="col-md-4 col-form-label text-md-end">{{ __('Consolidations et normes comptables internationales') }}</label>
+                                <input type="text" name="matiere4" value="Consolidations et normes comptables internationales" hidden>
+                                <div class="col-md-6">
+                                    <input id="note4" placeholder="xx,yy" type="text" class="form-control @error('note4') is-invalid @enderror" name="note4" value="{{ old('note4') }}"  autocomplete="note4" >
+
+                                    @error('note4')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="previous-section btn btn-outline-secondary offset-md-5" data-section="section-3">
+                            {{ __('Retour') }}
+                        </button>
+                        <button type="button" class="next-section btn btn-outline-primary" data-section="section-5">
+                            {{ __('Suivant') }}
+                        </button>
+                    </fieldset>
+                    <fieldset id="section-5" style="display:none">
+                        <input type="text" placeholder="DUT">
+                        <button type="button" class="previous-section btn btn-outline-secondary offset-md-5" data-section="section-4">
+                            {{ __('Retour') }}
+                        </button>
+                        <button type="button" class="next-section btn btn-outline-primary" data-section="section-6">
+                            {{ __('Suivant') }}
+                        </button>
+                    </fieldset>
+                    <fieldset id="section-6" style="display:none">
+                        <div>
+                            <h3 class="d-flex justify-content-center">Comptabilité financière</h3>
+                            <div class="row mb-3">
+                                <label for="note1" class="col-md-4 col-form-label text-md-end">{{ __('Les concepts de base') }}</label>
+                                <input type="text" name="matiere1" value="les concepts de base" hidden>
+                                <div class="col-md-6">
+                                    <input id="note1" placeholder="xx,yy" type="text" class="form-control @error('note1') is-invalid @enderror" name="note1" value="{{ old('note1') }}"  autocomplete="note1" >
+
+                                    @error('note1')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="note2" class="col-md-4 col-form-label text-md-end">{{ __('Les opérations courantes') }}</label>
+                                <input type="text" name="matiere2" value="les opérations courantes" hidden>
+                                <div class="col-md-6">
+                                    <input id="note2" placeholder="xx,yy" type="text" class="form-control @error('note2') is-invalid @enderror" name="note2" value="{{ old('note2') }}"  autocomplete="note2" >
+
+                                    @error('note2')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="note3" class="col-md-4 col-form-label text-md-end">{{ __('Comptabilité approfondies et révision des comptes') }}</label>
+                                <input type="text" name="matiere3" value="Comptabilité approfondies et révision des comptes" hidden>
+                                <div class="col-md-6">
+                                    <input id="note3" placeholder="xx,yy" type="text" class="form-control @error('note3') is-invalid @enderror" name="note3" value="{{ old('note3') }}"  autocomplete="note3" >
+
+                                    @error('note3')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="note4" class="col-md-4 col-form-label text-md-end">{{ __('Consolidations et normes comptables internationales') }}</label>
+                                <input type="text" name="matiere4" value="Consolidations et normes comptables internationales" hidden>
+                                <div class="col-md-6">
+                                    <input id="note4" placeholder="xx,yy" type="text" class="form-control @error('note4') is-invalid @enderror" name="note4" value="{{ old('note4') }}"  autocomplete="note4" >
+
+                                    @error('note4')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="d-flex justify-content-center">Contrôle de gestion</h3>
+                            <div class="row mb-3">
+                                <label for="note5" class="col-md-4 col-form-label text-md-end">{{ __('Comptabilité analytique') }}</label>
+                                <input type="text" name="matiere5" value="Comptabilité analytique" hidden>
+                                <div class="col-md-6">
+                                    <input id="note5" placeholder="xx,yy" type="text" class="form-control @error('note5') is-invalid @enderror" name="note5" value="{{ old('note5') }}"  autocomplete="note5" >
+
+                                    @error('note5')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="note6" class="col-md-4 col-form-label text-md-end">{{ __('Budget et tableau de bord') }}</label>
+                                <input type="text" name="matiere6" value="Budget et tableau de bord" hidden>
+                                <div class="col-md-6">
+                                    <input id="note6" placeholder="xx,yy" type="text" class="form-control @error('note6') is-invalid @enderror" name="note6" value="{{ old('note6') }}"  autocomplete="note6" >
+
+                                    @error('note6')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="note7" class="col-md-4 col-form-label text-md-end">{{ __('Gestion de trésorerie') }}</label>
+                                <input type="text" name="matiere7" value="Gestion de trésorerie" hidden>
+                                <div class="col-md-6">
+                                    <input id="note7" placeholder="xx,yy" type="text" class="form-control @error('note7') is-invalid @enderror" name="note7" value="{{ old('note7') }}"  autocomplete="note7" >
+
+                                    @error('note7')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="d-flex justify-content-center">Analyse financière</h3>
+                            <div class="row mb-3">
+                                <label for="note8" class="col-md-4 col-form-label text-md-end">{{ __('Moyenne Analyse financière') }}</label>
+                                <input type="text" name="matiere8" value="Analyse financière" hidden>
+                                <div class="col-md-6">
+                                    <input id="note8" placeholder="xx,yy" type="text" class="form-control @error('note8') is-invalid @enderror" name="note8" value="{{ old('note8') }}"  autocomplete="note8" >
+
+                                    @error('note8')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="previous-section btn btn-outline-secondary offset-md-4" data-section="section-5">
+                            {{ __('Retour') }}
+                        </button>
+                        <button type="button" class="next-section btn btn-outline-primary" data-section="section-7">
+                            {{ __('Suivant') }}
+                        </button>
+                    </fieldset>
+                    <fieldset id="section-7" style="display:none">
+                        <div class="row mb-3">
+                            <label for="file1" class="col-md-5 col-form-label text-md-end">{{ __('Importer votre photo') }}</label>
+                            <div class="col-md-6">
+                                <input id="file1" type="file" class="form-control @error('file1') is-invalid @enderror" name="file1" value="{{ old('file1') }}" required autocomplete="file1" >
+                                @error('file1')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="file2" class="col-md-5 col-form-label text-md-end">{{ __('Importer votre relvès') }}</label>
+                            <div class="col-md-6">
+                                <input id="file2" type="file" class="form-control @error('file2') is-invalid @enderror" name="file2" value="{{ old('file2') }}" required autocomplete="file2" >
+                                @error('file2')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="file3" class="col-md-5 col-form-label text-md-end">{{ __('Importer votre baccalaureat') }}</label>
+                            <div class="col-md-6">
+                                <input id="file3" type="file" class="form-control @error('file3') is-invalid @enderror" name="file3" value="{{ old('file3') }}" required autocomplete="file3" >
+                                @error('file3')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="file4" class="col-md-5 col-form-label text-md-end">{{ __('Importer votre demande') }}</label>
+                            <div class="col-md-6">
+                                <input id="file4" type="file" class="form-control @error('file4') is-invalid @enderror" name="file4" value="{{ old('file4') }}" required autocomplete="file4" >
+                                @error('file4')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <button type="button" class="previous-section btn btn-outline-secondary " data-section="section-6">
+                            {{ __('Retour') }}
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            {{ __('Register') }}
+                        </button>
+                    </fieldset>
+                </form>
+
+                <!-- your script to handle the button clicks -->
+                <script>
+                    $('.next-section, .previous-section').on('click', function() {
+                        var currentSection = $(this).parent();
+                        var nextSection = $('#' + $(this).data('section'));
+                        if (nextSection.length) {
+                            currentSection.hide();
+                            nextSection.show();
+                        } else {
+                            console.error('Section not found: ' + $(this).data('section'));
+                        }
+                    });
+                    $(document).ready(function() {
+                            $('#section-4 input[type=text], #section-5 input[type=text], #section-6 input[type=text], #section-3 input[type=text]').attr('disabled', true);
+                        
+                            $('#DEUG, #BTS, #DUT, #DTS').change(function() {
+                            if ($('#DEUG').is(':checked')) {
+                                // $('#section-3').show();
+                                $('#section-4').hide();
+                                $('#section-5').hide();
+                                $('#section-6').hide();
+                                $('#section-3 input[type=text]').attr('disabled', false);
+                                // Clear the values of text inputs in #inputs2
+                                $('#section-4 input[type=text]').val('');
+                                $('#section-5 input[type=text]').val('');
+                                $('#section-6 input[type=text]').val('');
+                                $('#section-4 input[type=text]').attr('disabled', true);
+                                $('#section-5 input[type=text]').attr('disabled', true);
+                                $('#section-6 input[type=text]').attr('disabled', true);
+                            }
+                            else if ($('#BTS').is(':checked')) {
+                                $('#section-3').hide();
+                                // $('#section-4').show();
+                                $('#section-5').hide();
+                                $('#section-6').hide();
+                                $('#section-4 input[type=text]').attr('disabled', false);
+                                // Clear the values of text inputs in #inputs2
+                                $('#section-3 input[type=text]').val('');
+                                $('#section-5 input[type=text]').val('');
+                                $('#section-6 input[type=text]').val('');
+                                $('#section-3 input[type=text]').attr('disabled', true);
+                                $('#section-5 input[type=text]').attr('disabled', true);
+                                $('#section-6 input[type=text]').attr('disabled', true);
+                            }
+                            else if ($('#DUT').is(':checked')) {
+                                $('#section-3').hide();
+                                $('#section-4').hide();
+                                // $('#section-5').show();
+                                $('#section-6').hide();
+                                $('#section-5 input[type=text]').attr('disabled', false);
+                                // Clear the values of text inputs in #inputs2
+                                $('#section-3 input[type=text]').val('');
+                                $('#section-4 input[type=text]').val('');
+                                $('#section-6 input[type=text]').val('');
+                                $('#section-3 input[type=text]').attr('disabled', true);
+                                $('#section-4 input[type=text]').attr('disabled', true);
+                                $('#section-6 input[type=text]').attr('disabled', true);
+
+                            }
+                            else if ($('#DTS').is(':checked')) {
+                                $('#section-3').hide();
+                                $('#section-4').hide();
+                                $('#section-5').hide();
+                                // $('#section-6').show();
+                                $('#section-6 input[type=text]').attr('disabled', false);
+                                // Clear the values of text inputs in #inputs2
+                                $('#section-3 input[type=text]').val('');
+                                $('#section-4 input[type=text]').val('');
+                                $('#section-5 input[type=text]').val('');
+                                $('#section-3 input[type=text]').attr('disabled', true);
+                                $('#section-4 input[type=text]').attr('disabled', true);
+                                $('#section-5 input[type=text]').attr('disabled', true);
+                            }
+                            
+                            });
+                        });
+                </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
